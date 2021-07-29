@@ -1,11 +1,29 @@
 <template>
   <hr />
   <p>Edit the event here</p>
-   <button @click="register">Edit Profile</button>
+   <button @click="edit">Edit Profile</button>
 </template>
 
 <script>
 export default {
-  props: ['passenger']
+   props: ['passenger'],
+  inject: ["GStore"], //<---- Inject the glebal Store
+  methods: {
+    edit() {
+      // Assuming successful API call to register them
+      // Set a flash massage to appear in the next page loaded which says
+      // 'You are successfully registered for ' + this.event.title
+
+      this.$router.push({
+        name: 'PassengerList',
+        params: {id: this.passenger._id}
+      }),
+      this.GStore.flashMessage = 'You are successfully updated for ' + this.passenger.name
+      setTimeout(() => {
+        // After 3 seconds remove it
+        this.GStore.flashMessage = ''
+      }, 3000)
+    }
+  }
 }
 </script>
