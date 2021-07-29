@@ -13,7 +13,6 @@
 // @ is an alias to /src
 import PassengerCard from '@/components/PassengerCard.vue'
 import PassengerService from '@/services/PassengerService.js'
-import NProgress from 'nprogress'
 
 export default {
   name: 'Home',
@@ -37,7 +36,6 @@ export default {
     }
   },
   beforeRouteEnter(routeTo, routeFrom, next) {
-    NProgress.start()
     PassengerService.getPassengers(
       parseInt(routeTo.query.perPage) || 10,
       parseInt(routeTo.query.page) || 0
@@ -50,14 +48,10 @@ export default {
       })
       .catch(() => {
         next({ name: 'NetworkError' })
-      })
-      .finally(() => {
-        NProgress.done()
       })
   },
 
   beforeRouteUpdate(routeTo, routeFrom, next) {
-    NProgress.start()
     PassengerService.getPassengers(
       parseInt(routeTo.query.perPage) || 10,
       parseInt(routeTo.query.page) || 0
@@ -70,9 +64,6 @@ export default {
       })
       .catch(() => {
         next({ name: 'NetworkError' })
-      })
-      .finally(() => {
-        NProgress.done()
       })
   },
   computed: {
