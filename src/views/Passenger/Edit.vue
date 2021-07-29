@@ -7,7 +7,7 @@
 <script>
 export default {
    props: ['passenger'],
-  inject: ["GStore"], //<---- Inject the glebal Store
+  inject: ['GStore'], //<---- Inject the glebal Store
   methods: {
     edit() {
       // Assuming successful API call to register them

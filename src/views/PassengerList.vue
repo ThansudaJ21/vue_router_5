@@ -6,24 +6,6 @@
       :key="passenger._id"
       :passenger="passenger"
     />
-    <!-- <div class="pagination">
-      <router-link
-        id="page-prev"
-        :to="{ name: 'EventList', query: { page: page - 1 } }"
-        rel="prev"
-        v-if="page != 1"
-        >Prev Page</router-link
-      >
-      <router-link
-        id="next-prev"
-        :to="{ name: 'EventList', query: { page: page + 1 } }"
-        rel="next"
-        v-if="hasNextPage"
-        >Next Page</router-link
-      ></div>
-
-      <router-link :to="{name: 'EventList', query: { perPage: perPage + 1 }}">Increase</router-link>
-      <router-link :to="{name: 'EventList', query: { perPage: perPage - 1 }}">Decrease</router-link> -->
   </div>
 </template>
 
@@ -31,8 +13,7 @@
 // @ is an alias to /src
 import PassengerCard from '@/components/PassengerCard.vue'
 import PassengerService from '@/services/PassengerService.js'
-import { watchEffect } from '@vue/runtime-core'
-// import axios from 'axios'
+import NProgress from 'nprogress'
 
 export default {
   name: 'Home',
@@ -55,17 +36,44 @@ export default {
       totalEvents: 0 // <--- Added thiss to store totalEvents
     }
   },
-  created() {
-    watchEffect(() => {
-      PassengerService.getPassengers(this.perPage, this.page)
-        .then((response) => {
-          this.passengers = response.data.data
-          this.totalEvents = response.headers['x-total-count'] //<===store it
+  beforeRouteEnter(routeTo, routeFrom, next) {
+    NProgress.start()
+    PassengerService.getPassengers(
+      parseInt(routeTo.query.perPage) || 10,
+      parseInt(routeTo.query.page) || 0
+    )
+      .then((response) => {
+        next((comp) => {
+          comp.passengers = response.data.data
+          comp.totalEvents = response.headers['x-total-count']
         })
-        .catch((error) => {
-          console.log(error)
+      })
+      .catch(() => {
+        next({ name: 'NetworkError' })
+      })
+      .finally(() => {
+        NProgress.done()
+      })
+  },
+
+  beforeRouteUpdate(routeTo, routeFrom, next) {
+    NProgress.start()
+    PassengerService.getPassengers(
+      parseInt(routeTo.query.perPage) || 10,
+      parseInt(routeTo.query.page) || 0
+    )
+      .then((response) => {
+        next((comp) => {
+          comp.passengers = response.data.data
+          comp.totalEvents = response.headers['x-total-count']
         })
-    })
+      })
+      .catch(() => {
+        next({ name: 'NetworkError' })
+      })
+      .finally(() => {
+        NProgress.done()
+      })
   },
   computed: {
     hasNextPage() {
