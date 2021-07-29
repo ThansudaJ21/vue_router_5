@@ -3,6 +3,9 @@
     <div id="nav">
       <router-link :to="{ name: 'PassengerDetails', params: { id } }"
         >Details</router-link
+      >|
+      <router-link :to="{ name: 'Airline', params: { id } }"
+        >Airline</router-link
       >
       |
       <router-link :to="{ name: 'PassengerEdit', params: { id } }"

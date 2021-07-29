@@ -1,15 +1,14 @@
 <template>
   <hr />
   <div v-if="passenger">
-    <!-- <img :src="passenger.airline.logo" />
+    <img :src="passenger.airline.logo" />
     <img
       v-for="airline in passenger.airline"
       :key="airline.id"
       :src="airline.logo"
-    /> -->
-    <h1>Name: {{ passenger.name }}</h1>
-     <h3>Trips: {{ passenger.trips }}</h3>
-    <!-- <div v-if="check">
+    />
+    <!-- <h1>Name: {{ passenger.name }}</h1> -->
+    <div v-if="check">
       <h2>Airline name: {{ passenger.airline.name }}</h2>
       <h3>Slogan: {{ passenger.airline.slogan }}</h3>
       <h4>Country: {{ passenger.airline.country }}</h4>
@@ -24,7 +23,7 @@
         <p>Head quaters: {{ airline.head_quaters }}</p>
         <p>Website: {{ airline.website }}</p>
       </span>
-    </div> -->
+    </div>
   </div>
 </template>
 
