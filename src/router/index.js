@@ -7,7 +7,8 @@ import PassengerEdit from '../views/Passenger/Edit.vue'
 import NotFound from '@/views/Passenger/NotFound.vue'
 import Airline from '@/views/Passenger/Airline.vue' 
 import NProgress from 'nprogress'
-
+import PassengerService from '../services/PassengerService'
+import GStore from '@/store'
 const routes = [
   {
     path: '/',
@@ -28,6 +29,25 @@ const routes = [
     name: 'PassengerLayout',
     component: PassengerLayout,
     props: true,
+    beforeEnter: (to) => {
+      // put API call here
+      return PassengerService.getPassenger(to.params.id) //Return and params.id
+        .then(response => {
+          //still nees to set the data here
+          GStore.passenger = response.data //<---- Store data here
+        })
+        .catch((error) => {
+          if (error.response && error.response.status == 204) {
+            return {
+              name: '404Resource',
+              params: { resource: 'passenger' }
+            }
+          } else {
+            return { name: 'NetworkError' }
+          }
+        })
+
+    },
     children: [
       {
         path: '',

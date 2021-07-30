@@ -1,5 +1,5 @@
 <template>
-  <div v-if="passenger">
+  <div v-if="GStore.passenger">
     <div id="nav">
       <router-link :to="{ name: 'PassengerDetails', params: { id } }"
         >Details</router-link
@@ -12,35 +12,16 @@
         >Edit</router-link
       >
     </div>
-    <router-view :passenger="passenger" />
+    <router-view :passenger="GStore.passenger" />
   </div>
 </template>
 
 <script>
-import PassengerService from '@/services/PassengerService.js'
+// import PassengerService from '@/services/PassengerService.js'
 
 export default {
-  props: ['id'],
-  data() {
-    return {
-      passenger: null
-    }
-  },
-  created() {
-    PassengerService.getPassenger(this.id)
-      .then((response) => {
-        this.passenger = response.data
-        if (response && response.status == 204) {
-          this.$router.push ({
-            name: '404Resource',
-            params: {resource: 'passenger'}
-          })
-        }
-      })
-      .catch(() => {
-       
-      })
-  }
+
+  inject: ['GStore']
 }
 </script>
 
